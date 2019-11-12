@@ -104,7 +104,12 @@ class Game extends React.Component {
         desc += getPos(index);
       }
 
-      return (
+      // 判断步骤
+      return this.state.stepNumber == move ? (
+        <li key={move}>
+          <button onClick={() => this.jumpTo(move)}><b>{desc}</b></button>
+        </li>
+      ) : (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
