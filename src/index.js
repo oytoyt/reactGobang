@@ -100,7 +100,7 @@ class Game extends React.Component {
 
       // 方法二
       if(move) {
-        const index = getDiff(current.squares, history[this.state.stepNumber - 1].squares);
+        const index = getDiff(history[move].squares, history[move - 1].squares);
         desc += getPos(index);
       }
 
