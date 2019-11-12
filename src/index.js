@@ -69,7 +69,8 @@ class Game extends React.Component {
       history: history.concat([
         {
           squares: squares,
-          activeIndex: i
+          // 方法一
+          // activeIndex: i
         }
       ]),
       stepNumber: history.length,
@@ -93,7 +94,16 @@ class Game extends React.Component {
       let desc = move ?
         'Go to move #' + move :
         'Go to game start';
-      if(move) desc += getPos(step.activeIndex);
+
+      // 方法一
+      // if(move) desc += getPos(step.activeIndex);
+
+      // 方法二
+      if(move) {
+        const index = getDiff(current.squares, history[this.state.stepNumber - 1].squares);
+        desc += getPos(index);
+      }
+
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -149,9 +159,21 @@ function calculateWinner(squares) {
   return null;
 }
 
+// 通过下标获取x，y
 function getPos(index) {
   const row = 3;
   const x = index % row + 1;
   const y = Math.floor(index / row) + 1;
   return `(${y}, ${x})`;
+}
+
+// 获取不同的下标
+function getDiff(arr, arr2) {
+  let _index;
+  arr.map((item, index) => {
+    const a = JSON.stringify(item),
+      b = JSON.stringify(arr2[index]);
+    if(a != b) _index = index;
+  });
+  return _index;
 }
