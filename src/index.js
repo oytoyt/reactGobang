@@ -155,7 +155,10 @@ class Game extends React.Component {
     let status;
     if (winner) {
       status = "Winner: " + winner;
-    } else {
+    //  判断是否为最后一步
+    } else if (this.state.stepNumber == (len * len)) {
+      status = "Peace!";
+    }else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
 
