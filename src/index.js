@@ -6,7 +6,12 @@ import './index.css';
 const len = 3;
 
 function Square(props) {
-  return (
+  // 判断是否高亮
+  return props.mark ? (
+    <button className="square" onClick={props.onClick}>
+      <mark>{props.value}</mark>
+    </button>
+  ) : (
     <button className="square" onClick={props.onClick}>
       {props.value}
     </button>
@@ -15,7 +20,21 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
-    return (
+    const winner = calculateWinner(this.props.squares, true);
+    let flag;
+    // 判断是否分出胜负。
+    // 判断是否为符合胜利数组
+    if(winner) flag = winner.indexOf(i) == -1 ? false : true;
+    // 将值传给`Square`
+    return flag ? (
+      // 添加key值
+      <Square
+        key={i}
+        mark={true}
+        value={this.props.squares[i]}
+        onClick={() => this.props.onClick(i)}
+      />
+    ) : (
       // 添加key值
       <Square
         key={i}
@@ -162,7 +181,8 @@ class Game extends React.Component {
 
 ReactDOM.render(<Game />, document.getElementById("root"));
 
-function calculateWinner(squares) {
+// flag为true时，返回符合的数组
+function calculateWinner(squares, flag) {
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
@@ -176,7 +196,8 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      // 判断需要返回什么
+      return flag ? lines[i] : squares[a];
     }
   }
   return null;
