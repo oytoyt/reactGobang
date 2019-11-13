@@ -61,7 +61,9 @@ class Game extends React.Component {
         }
       ],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
+      // 是否降序
+      isReverse: false
     };
   }
 
@@ -91,6 +93,10 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: (step % 2) === 0
     });
+  }
+
+  reverse() {
+    this.setState({isReverse: !this.state.isReverse});
   }
 
   render() {
@@ -124,6 +130,9 @@ class Game extends React.Component {
       );
     });
 
+    // 判断状态是否降序
+    if(this.state.isReverse) moves.reverse();
+
     let status;
     if (winner) {
       status = "Winner: " + winner;
@@ -141,6 +150,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <button onClick={() => this.reverse()}>升序/倒序</button>
           <ol>{moves}</ol>
         </div>
       </div>
