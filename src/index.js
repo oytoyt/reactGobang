@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// 自定义长度方便到时候修改
+const len = 3;
+
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -13,32 +16,37 @@ function Square(props) {
 class Board extends React.Component {
   renderSquare(i) {
     return (
+      // 添加key值
       <Square
+        key={i}
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
       />
     );
   }
 
+  // 封装函数，接受第二个循环的参数
+  row(i) {
+    // 第一个循环
+    return Array(len).fill(null).map((item, index) => {
+      return this.renderSquare((i * len) + index);
+    });
+  }
+
   render() {
+    // 这里先提升到代码头部， 因为row函数也要用到
+    // const len = 3;
+    // 第二个循环。并且加上key。
+    const boardRow = Array(len).fill(null).map((item, index) => {
+      return (
+        <div key={index} className="board-row">
+          {this.row(index)}
+        </div>
+      );
+    });
+
     return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
+      <div>{boardRow}</div>
     );
   }
 }
